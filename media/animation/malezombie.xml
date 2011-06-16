@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE darkRealm SYSTEM "schema.dtd">
+
+<!-- States for the maleZombie -->
+
+<darkRealm>
+ 	<character speed="1.25"/>
+ 	
+
+
+
+	<!-- Upper Body __________________________________________________________________________________________________________ -->
+	<stateLayer name="upperbody" type="partial" startState="idleLurking">
+		<blendMask>
+			<bone name="root" weight="0"/>
+			<bone name="leftHip" weight="0"/>
+			<bone name="rightHip" weight="0"/>
+			<bone name="back1" weight="0"/>
+			<bone name="back2" weight="1"/>
+			<bone name="back3" weight="1"/>
+		</blendMask>
+		<state name="attacking">
+			<blendTree>
+				<clip name="attack"/>
+			</blendTree>
+			<transitions>
+				<transition action="lurk" targetState="attacking_to_idleLurking" type="smooth" duration="0.5"/>
+				<transition action="walk" targetState="attacking_to_walking" type="smooth" duration="0.5"/>
+				<transition action="die" targetState="attacking_to_dying" type="smooth" duration="0.5"/>
+			</transitions>
+		</state>
+
+		<state name="idleLurking">
+			<blendTree>
+				<shortcut state="idleLurking" stateLayer="lowerbody"/>
+			</blendTree>
+			<transitions>
+				<transition action="walk" targetState="idleLurking_to_walking" type="smooth" duration="0.5"/>
+				<transition action="threat" targetState="idleLurking_to_threating" type="smooth" duration="0.5"/>
+				<transition action="die" targetState="idleLurking_to_dying" type="smooth" duration="0.5"/>
+
+				<transition action="attack" targetState="idleLurking_to_attacking" type="smooth" duration="0.5"/>
+			</transitions>
+		</state>
+		<state name="walking">
+			<blendTree>
+				<shortcut state="walking" stateLayer="lowerbody"/>
+			</blendTree>
+			<transitions>
+				<transition action="lurk" targetState="walking_to_idleLurking" type="smooth" duration="0.5"/>
+				<transition action="die" targetState="walking_to_dying" type="smooth" duration="0.5"/>
+
+				<transition action="attack" targetState="walking_to_attacking" type="smooth" duration="0.5"/>
+			</transitions>
+		</state>
+		<state name="threating">
+			<blendTree>
+				<shortcut state="threating" stateLayer="lowerbody"/>
+			</blendTree>
+			<transitions>
+				<transition action="walk" targetState="threating_to_walking" type="smooth" duration="0.5"/>
+				<transition action="die" targetState="threating_to_dying" type="smooth" duration="0.5"/>
+
+				<transition action="attack" targetState="threating_to_attacking" type="smooth" duration="0.5"/>
+			</transitions>
+		</state>
+		<state name="dying">
+			<blendTree>
+				<shortcut state="dying" stateLayer="lowerbody"/>
+			</blendTree>
+			<transitions>
+			</transitions>
+		</state>
+
+
+
+		<!-- Transition States _______________________________________________ -->
+
+
+		<!-- Attacking to ... _________________________ -->
+		<transitionState from="attacking" to="idleLurking"><transition action="attack" type="smooth" duration="0.5"/></transitionState>
+		<transitionState from="attacking" to="walking"><transition action="attack" type="smooth" duration="0.5"/></transitionState>
+		<transitionState from="attacking" to="dying"/>
+
+
+		<!-- Idle Lurking to ... _________________________ -->
+		<transitionState from="idleLurking" to="walking"><transition action="lurk" type="smooth" duration="0.5"/></transitionState>
+		<transitionState from="idleLurking" to="threating"/>
+		<transitionState from="idleLurking" to="dying"/>
+		
+		<transitionState from="idleLurking" to="attacking"><transition action="stop" type="smooth" duration="0.5"/></transitionState>
+
+
+		<!-- Walking Slow to ... _________________________ -->
+		<transitionState from="walking" to="idleLurking"><transition action="walk" type="smooth" duration="0.5"/></transitionState>
+		<transitionState from="walking" to="dying"/>
+		
+		<transitionState from="walking" to="attacking"><transition action="stop" type="smooth" duration="0.5"/></transitionState>
+
+
+		<!-- Threating to ... _________________________ -->
+		<transitionState from="threating" to="walking"/>
+		<transitionState from="threating" to="dying"/>
+		
+		<transitionState from="threating" to="attacking"/>
+	</stateLayer>
+
+
+
+
+	<!-- Lower Body __________________________________________________________________________________________________________ -->
+	<stateLayer name="lowerbody" type="base" startState="idleLurking">
+		<blendMask>
+			<bone name="root" weight="1"/>
+			<bone name="leftHip" weight="1"/>
+			<bone name="rightHip" weight="1"/>
+			<bone name="back1" weight="1"/>
+			<bone name="back2" weight="0"/>
+			<bone name="back3" weight="0"/>
+		</blendMask>
+		<state name="idleLurking">
+			<blendTree>
+				<lerp blendFactor="0.0" flags="idle_weight">
+					<clip name="idleA"/>
+    				<clip name="idleB"/>
+                </lerp>
+			</blendTree>
+			<transitions>
+				<transition action="walk" targetState="idleLurking_to_walking" type="smooth" duration="0.5"/>
+				<transition action="threat" targetState="idleLurking_to_threating" type="smooth" duration="0.5"/>
+				<transition action="die" targetState="idleLurking_to_dying" type="smooth" duration="0.5"/>
+			</transitions>
+		</state>
+		<state name="walking">
+			<blendTree>
+				<lerp blendFactor="0.0" flags="walk_weight">
+					<clip name="walkA" speed="1.05" flags="character_speed"/>
+    				<clip name="walkB" speed="1.5" flags="character_speed"/>
+                </lerp>
+			</blendTree>
+			<transitions>
+				<transition action="lurk" targetState="walking_to_idleLurking" type="smooth" duration="0.5"/>
+				<transition action="die" targetState="walking_to_dying" type="smooth" duration="0.5"/>
+			</transitions>
+		</state>
+		<state name="threating">
+			<blendTree>
+				<clip name="threat" loop="false"/>
+			</blendTree>
+			<transitions>
+				<transition action="walk" targetState="threating_to_walking" type="smooth" duration="0.5"/>
+				<transition action="die" targetState="threating_to_dying" type="smooth" duration="0.5"/>
+			</transitions>
+		</state>
+		<state name="dying">
+			<blendTree>
+				<clip name="death" loop="false"/>
+			</blendTree>
+			<transitions>
+			</transitions>
+		</state>
+
+
+
+		<!-- Transition States _______________________________________________ -->
+
+
+		<!-- Idle Lurking to ... _________________________ -->
+		<transitionState from="idleLurking" to="walking"><transition action="lurk" type="smooth" duration="0.5"/></transitionState>
+		<transitionState from="idleLurking" to="threating"/>
+		<transitionState from="idleLurking" to="dying"/>
+
+
+		<!-- Walking Slow to ... _________________________ -->
+		<transitionState from="walking" to="idleLurking"><transition action="walk" type="smooth" duration="0.5"/></transitionState>
+		<transitionState from="walking" to="dying"/>
+
+
+		<!-- Threating to ... _________________________ -->
+		<transitionState from="threating" to="walking"/>
+		<transitionState from="threating" to="dying"/>
+	</stateLayer>
+</darkRealm>

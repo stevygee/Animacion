@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup Label="ProjectConfigurations">
+		<ProjectConfiguration Include="Debug|Win32">
+			<Configuration>Debug</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="Release|Win32">
+			<Configuration>Release</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+	</ItemGroup>
+	<PropertyGroup Label="Globals">
+		<ProjectGuid>{FFE72D22-CC3F-6344-B4AD-422A2358B54A}</ProjectGuid>
+		<RootNamespace>Animacion</RootNamespace>
+		<Keyword>Win32Proj</Keyword>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+		<ConfigurationType>Application</ConfigurationType>
+		<CharacterSet>Unicode</CharacterSet>
+		<UseDebugLibraries>true</UseDebugLibraries>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+		<ConfigurationType>Application</ConfigurationType>
+		<CharacterSet>Unicode</CharacterSet>
+		<UseDebugLibraries>false</UseDebugLibraries>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+	<ImportGroup Label="ExtensionSettings">
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<PropertyGroup Label="UserMacros" />
+	<PropertyGroup>
+		<_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+		<OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">bin\debug\</OutDir>
+		<IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">obj\debug\</IntDir>
+		<TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Animacion</TargetName>
+		<LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+		<OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">bin\release\</OutDir>
+		<IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">obj\release\</IntDir>
+		<TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Animacion</TargetName>
+		<LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+		<ClCompile>
+			<AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+			<Optimization>Disabled</Optimization>
+			<AdditionalIncludeDirectories>..\..\include;..\..\include\animacion;..\..\include\tinyxml;$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\boost_1_42;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<MinimalRebuild>false</MinimalRebuild>
+			<BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<PrecompiledHeader></PrecompiledHeader>
+			<WarningLevel>Level3</WarningLevel>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+			<ProgramDataBaseFileName>$(OutDir)Animacion.pdb</ProgramDataBaseFileName>
+		</ClCompile>
+		<ResourceCompile>
+			<PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>..\..\include;..\..\include\animacion;..\..\include\tinyxml;$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\boost_1_42;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+		</ResourceCompile>
+		<Link>
+			<AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)Animacion.exe</OutputFile>
+			<AdditionalLibraryDirectories>$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost_1_42\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<SubSystem>Windows</SubSystem>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<TargetMachine>MachineX86</TargetMachine>
+		</Link>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+		<ClCompile>
+			<AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+			<Optimization>Full</Optimization>
+			<AdditionalIncludeDirectories>..\..\include;..\..\include\animacion;..\..\include\tinyxml;$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\boost_1_42;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<MinimalRebuild>false</MinimalRebuild>
+			<StringPooling>true</StringPooling>
+			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<PrecompiledHeader></PrecompiledHeader>
+			<WarningLevel>Level3</WarningLevel>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<DebugInformationFormat></DebugInformationFormat>
+		</ClCompile>
+		<ResourceCompile>
+			<PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>..\..\include;..\..\include\animacion;..\..\include\tinyxml;$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\boost_1_42;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+		</ResourceCompile>
+		<Link>
+			<AdditionalDependencies>OgreMain.lib;OIS.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)Animacion.exe</OutputFile>
+			<AdditionalLibraryDirectories>$(OGRE_HOME)\lib\release;$(OGRE_HOME)\boost_1_42\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<SubSystem>Windows</SubSystem>
+			<GenerateDebugInformation>false</GenerateDebugInformation>
+			<OptimizeReferences>true</OptimizeReferences>
+			<EnableCOMDATFolding>true</EnableCOMDATFolding>
+			<TargetMachine>MachineX86</TargetMachine>
+		</Link>
+	</ItemDefinitionGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\include\AnimationDemo.h" />
+		<ClInclude Include="..\..\include\GameAnimation.h" />
+		<ClInclude Include="..\..\include\GameRenderer.h" />
+		<ClInclude Include="..\..\include\ObjectTextDisplay.h" />
+		<ClInclude Include="..\..\include\OgreFramework.h" />
+		<ClInclude Include="..\..\include\PlayerCharacter.h" />
+		<ClInclude Include="..\..\include\SmoothableRadian.h" />
+		<ClInclude Include="..\..\include\SmoothValue.h" />
+		<ClInclude Include="..\..\include\animacion\Animacion.h" />
+		<ClInclude Include="..\..\include\animacion\AnimationBlendNodes.h" />
+		<ClInclude Include="..\..\include\animacion\AnimationController.h" />
+		<ClInclude Include="..\..\include\animacion\AnimationGUI.h" />
+		<ClInclude Include="..\..\include\animacion\AnimationPipeline.h" />
+		<ClInclude Include="..\..\include\animacion\AnimationStateMachine.h" />
+		<ClInclude Include="..\..\include\animacion\AnimationXML.h" />
+		<ClInclude Include="..\..\include\tinyxml\tinystr.h" />
+		<ClInclude Include="..\..\include\tinyxml\tinyxml.h" />
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\src\AnimationDemo.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\GameAnimation.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\GameRenderer.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\main.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\ObjectTextDisplay.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\OgreFramework.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\PlayerCharacter.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\SmoothableRadian.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\SmoothValue.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationBlendNodes.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationController.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationGUI.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationPipeline.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationStateMachine.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationXML.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\tinyxml\tinystr.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\tinyxml\tinyxml.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\tinyxml\tinyxmlerror.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\src\tinyxml\tinyxmlparser.cpp">
+		</ClCompile>
+	</ItemGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+	<ImportGroup Label="ExtensionTargets">
+	</ImportGroup>
+</Project>

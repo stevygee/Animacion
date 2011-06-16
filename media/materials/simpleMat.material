@@ -1,0 +1,41 @@
+material eva_material
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture eva_texture.jpg
+			}
+		}
+	}
+}
+
+material maleZombieMaterial
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture zombie1.jpg
+			}
+		}
+	}
+}
+
+material Examples/Rockwall
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture rockwall.tga
+			}
+		}
+	}
+}

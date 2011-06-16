@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!ELEMENT darkRealm (character?,stateLayer+)>
+
+<!ELEMENT character (attachedObject?)>
+<!ATTLIST character speed CDATA #IMPLIED>
+
+<!ELEMENT attachedObject (position,rotation)>
+<!ATTLIST attachedObject type (weapon) #REQUIRED
+                         bone CDATA #REQUIRED>
+                         
+<!ELEMENT position EMPTY>
+<!ATTLIST position x CDATA #REQUIRED
+                   y CDATA #REQUIRED
+                   z CDATA #REQUIRED>
+                   
+<!ELEMENT rotation EMPTY>
+<!ATTLIST rotation x CDATA #REQUIRED
+                   y CDATA #REQUIRED
+                   z CDATA #REQUIRED>
+
+<!ELEMENT stateLayer (blendMask?,(state|transitionState)+)>
+<!ATTLIST stateLayer name ID #REQUIRED
+                     type (base|partial) #REQUIRED
+                     startState IDREF #REQUIRED>
+
+<!ELEMENT blendMask (bone+)>
+
+<!ELEMENT bone EMPTY>
+<!ATTLIST bone name CDATA #REQUIRED
+               weight CDATA #REQUIRED>
+
+<!ELEMENT state (blendTree, transitions, end?)>
+<!ATTLIST state name ID #REQUIRED>
+
+<!ELEMENT transitionState (transition?)>
+<!ATTLIST transitionState from IDREF #REQUIRED
+                          to IDREF #REQUIRED>
+
+<!ELEMENT blendTree (clip|lerp|shortcut)>
+
+<!ELEMENT clip EMPTY>
+<!ATTLIST clip name CDATA #REQUIRED
+               temporalPlayback (true|false) #IMPLIED
+               speed CDATA #IMPLIED
+               loop (true|false) #IMPLIED
+               flags CDATA #IMPLIED>
+               
+<!ELEMENT lerp (clip|lerp|shortcut)+>
+<!ATTLIST lerp blendFactor CDATA #REQUIRED
+               flags CDATA #IMPLIED>
+               
+<!ELEMENT shortcut EMPTY>
+<!ATTLIST shortcut state IDREF #REQUIRED
+                   stateLayer IDREF #IMPLIED
+                   flags CDATA #IMPLIED>
+                   
+<!ELEMENT transitions (transition*)>
+
+<!ELEMENT transition EMPTY>
+<!ATTLIST transition action CDATA #REQUIRED
+                     targetState CDATA #IMPLIED
+                     type (pop|linear|smooth) #REQUIRED
+                     duration CDATA #IMPLIED>
+
+<!ELEMENT end EMPTY>
+<!ATTLIST end targetState IDREF #REQUIRED>
+

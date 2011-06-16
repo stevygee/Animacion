@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="include">
+			<UniqueIdentifier>{505FC96A-6A0D-9D43-BB35-1C6E943B9520}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="include\animacion">
+			<UniqueIdentifier>{4FBE55D9-1A35-F64B-A0AF-6DC273BF3BD3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="include\tinyxml">
+			<UniqueIdentifier>{0CA9C1D3-FDAD-CC49-85C1-B097CDE97D21}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src">
+			<UniqueIdentifier>{4D1A33F3-0504-5844-B817-20A1930C8261}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\animacion">
+			<UniqueIdentifier>{64B4DD68-7BD7-AE4D-9A0C-2EBEFB2D9949}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\tinyxml">
+			<UniqueIdentifier>{F6653418-CB4A-B645-96AE-99072253D49E}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\include\AnimationDemo.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\GameAnimation.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\GameRenderer.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\ObjectTextDisplay.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\OgreFramework.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\PlayerCharacter.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\SmoothableRadian.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\SmoothValue.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\animacion\Animacion.h">
+			<Filter>include\animacion</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\animacion\AnimationBlendNodes.h">
+			<Filter>include\animacion</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\animacion\AnimationController.h">
+			<Filter>include\animacion</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\animacion\AnimationGUI.h">
+			<Filter>include\animacion</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\animacion\AnimationPipeline.h">
+			<Filter>include\animacion</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\animacion\AnimationStateMachine.h">
+			<Filter>include\animacion</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\animacion\AnimationXML.h">
+			<Filter>include\animacion</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\tinyxml\tinystr.h">
+			<Filter>include\tinyxml</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\include\tinyxml\tinyxml.h">
+			<Filter>include\tinyxml</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\src\AnimationDemo.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\GameAnimation.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\GameRenderer.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\ObjectTextDisplay.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\OgreFramework.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\PlayerCharacter.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\SmoothableRadian.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\SmoothValue.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationBlendNodes.cpp">
+			<Filter>src\animacion</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationController.cpp">
+			<Filter>src\animacion</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationGUI.cpp">
+			<Filter>src\animacion</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationPipeline.cpp">
+			<Filter>src\animacion</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationStateMachine.cpp">
+			<Filter>src\animacion</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\animacion\AnimationXML.cpp">
+			<Filter>src\animacion</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\tinyxml\tinystr.cpp">
+			<Filter>src\tinyxml</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\tinyxml\tinyxml.cpp">
+			<Filter>src\tinyxml</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\tinyxml\tinyxmlerror.cpp">
+			<Filter>src\tinyxml</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\src\tinyxml\tinyxmlparser.cpp">
+			<Filter>src\tinyxml</Filter>
+		</ClCompile>
+	</ItemGroup>
+</Project>

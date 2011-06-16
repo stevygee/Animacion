@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE darkRealm SYSTEM "schema.dtd">
+
+<!-- States for the PlayerCharacter -->
+
+<darkRealm>
+	<character speed="3.575"><!-- vorher 2.75 wobei moveSpeed / 27 die normale speed vom walkcycle ist -->
+		<attachedObject type="weapon" bone="rightHand">
+			<position x="16.2" y="-0.5" z="0.4"/><!-- x=arm-richtung, z=world-Y, y=links-rechts -->
+			<rotation x="11.0" y="90.0" z="180.0"/><!-- y=um zeigefinger drehen, x=um arm-achse drehen -->
+		</attachedObject>
+	</character>
+	
+	
+	
+	
+	<!-- Upper Body __________________________________________________________________________________________________________ -->
+	<stateLayer name="upperbody" type="partial" startState="noweaponIdle">
+		<blendMask>
+			<bone name="root" weight="0"/>
+			<bone name="leftHip" weight="0"/>
+			<bone name="rightHip" weight="0"/>
+			<bone name="back1" weight="0"/>
+			<bone name="back2" weight="1"/>
+			<bone name="back3" weight="1"/>
+		</blendMask>
+		<state name="noweaponIdle">
+			<blendTree>
+				<shortcut state="idle" stateLayer="lowerbody"/>
+			</blendTree>
+			<transitions>
+				<transition action="run" targetState="noweaponIdle_to_noweaponRunning" type="smooth" duration="0.25"/>
+				<transition action="aim" targetState="noweaponIdle_to_aiming" type="smooth" duration="0.25"/>
+			</transitions>
+		</state>
+		<state name="noweaponRunning">
+			<blendTree>
+				<shortcut state="running" stateLayer="lowerbody"/>
+			</blendTree>
+			<transitions>
+				<transition action="stop" targetState="noweaponRunning_to_noweaponIdle" type="smooth" duration="0.13"/>
+				<transition action="aim" targetState="noweaponRunning_to_aiming" type="smooth" duration="0.6"/>
+			</transitions>
+		</state>
+		<state name="aiming">
+			<blendTree>
+				<lerp blendFactor="0.0" flags="aim_vertical1">
+					<lerp blendFactor="0.0" flags="aim_vertical2">
+						<clip name="aimUp" temporalPlayback="false"/>
+						<clip name="aim" temporalPlayback="false"/>
+					</lerp>
+					<lerp blendFactor="0.0" flags="aim_vertical3">
+						<clip name="aim" temporalPlayback="false"/>
+						<clip name="aimDown" temporalPlayback="false"/>
+					</lerp>
+				</lerp>
+			</blendTree>
+			<transitions>
+				<transition action="reload" targetState="reloading" type="pop" duration="3"/>
+				<transition action="drop_weapon_idle" targetState="aiming_to_noweaponIdle" type="smooth" duration="0.3"/>
+				<transition action="drop_weapon_run" targetState="aiming_to_noweaponRunning" type="smooth" duration="0.5"/>
+			</transitions>
+		</state>
+		<state name="reloading">
+			<blendTree>
+				<clip name="aimDown" temporalPlayback="false"/><!-- reload anim -->
+			</blendTree>
+			<transitions>
+				<!-- drop weapon while reload? -->
+			</transitions>
+			<end targetState="aiming"/>
+		</state>
+		
+		
+		
+		<!-- Transition States _______________________________________________ -->
+		<transitionState from="noweaponIdle" to="noweaponRunning"><transition action="stop" type="smooth" duration="0.13"/></transitionState>
+        <transitionState from="noweaponIdle" to="aiming"><transition action="drop_weapon_idle" type="smooth" duration="0.25"/></transitionState>
+        <transitionState from="noweaponRunning" to="noweaponIdle"><transition action="run" type="smooth" duration="0.25"/></transitionState>
+        <transitionState from="noweaponRunning" to="aiming"><transition action="drop_weapon_run" type="smooth" duration="0.5"/></transitionState>
+        <transitionState from="aiming" to="noweaponIdle"><transition action="aim" type="smooth" duration="0.25"/></transitionState>
+        <transitionState from="aiming" to="noweaponRunning"><transition action="aim" type="smooth" duration="0.5"/></transitionState>
+	</stateLayer>
+	
+	
+	
+	
+	<!-- Lower Body __________________________________________________________________________________________________________ -->
+	<stateLayer name="lowerbody" type="base" startState="idle">
+		<blendMask>
+			<bone name="root" weight="1"/>
+			<bone name="leftHip" weight="1"/>
+			<bone name="rightHip" weight="1"/>
+			<bone name="back1" weight="1"/>
+			<bone name="back2" weight="0"/>
+			<bone name="back3" weight="0"/>
+		</blendMask>
+		<state name="idle">
+			<blendTree>
+				<clip name="idle"/>
+			</blendTree>
+			<transitions>
+				<transition action="run" targetState="idle_to_running" type="smooth" duration="0.25"/>
+			</transitions>
+		</state>
+		<state name="running">
+			<blendTree>
+				<clip name="run" speed="0.3" flags="character_speed"/><!--  speed="2.7"  -->
+			</blendTree>
+			<transitions>
+				<transition action="stop" targetState="running_to_idle" type="smooth" duration="0.13"/>
+			</transitions>
+		</state>
+		
+		
+		
+		<!-- Transition States _______________________________________________ -->
+		<transitionState from="idle" to="running"><transition action="stop" type="smooth" duration="0.13"/></transitionState>
+		<transitionState from="running" to="idle"><transition action="run" type="smooth" duration="0.25"/></transitionState>
+	</stateLayer>
+</darkRealm>
