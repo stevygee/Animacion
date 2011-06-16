@@ -1,7 +1,7 @@
 /*
 	Animación!
 	Copyright (c) 2011 Stefan Grassberger
-	See license in StevysAnimationSystem.h
+	See license in Animacion.h
 */
 
 #include "AnimationGUI.h"
