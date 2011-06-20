@@ -6,6 +6,8 @@
 AnimationDemo::AnimationDemo()
 {
 	this->playerInputVector = Ogre::Vector3(Ogre::Vector3::ZERO);
+	this->aimAngleH = Ogre::Radian(Ogre::Degree(0));
+	this->aimAngleV = Ogre::Radian(Ogre::Degree(0));
 }
 
 AnimationDemo::~AnimationDemo()
@@ -34,23 +36,22 @@ void AnimationDemo::setupDemoScene()
 	this->loaded = false;
 
 	// Init game systems
-	this->gameRenderer = new GameRenderer( OgreFramework::getSingletonPtr()->m_pSceneMgr );
-	this->gameRenderer->init();
-	this->gameAnimation = new GameAnimation(this->gameRenderer);
+	this->gameAnimation = new GameAnimation();
 	this->gameAnimation->init();
+	// ... other systems ...
 
 	// Setup scene
-    this->gameRenderer->getSceneManager()->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
-	this->gameRenderer->getSceneManager()->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+    OgreFramework::getSingletonPtr()->m_pSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
+	OgreFramework::getSingletonPtr()->m_pSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 	
-	Ogre::Light* directionalLight = this->gameRenderer->getSceneManager()->createLight("directionalLight");
+	Ogre::Light* directionalLight = OgreFramework::getSingletonPtr()->m_pSceneMgr->createLight("directionalLight");
     directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
     directionalLight->setDiffuseColour(Ogre::ColourValue(.5, .5, .5));
     directionalLight->setSpecularColour(Ogre::ColourValue(.5, .5, .5));
     directionalLight->setDirection(Ogre::Vector3( 0, -1, 1 )); 
 
 	// Init characters
-	this->playerChar = new PlayerCharacter(this->gameRenderer);
+	this->playerChar = new PlayerCharacter();
 	this->playerChar->init("eva.mesh", this->gameAnimation);
 	this->playerChar->ent->setCastShadows(true);
 
@@ -58,21 +59,21 @@ void AnimationDemo::setupDemoScene()
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
 	Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
         plane, 3500, 3500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
-	Ogre::Entity* entGround = this->gameRenderer->getSceneManager()->createEntity("GroundEntity", "ground");
-    this->gameRenderer->getSceneManager()->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
+	Ogre::Entity* entGround = OgreFramework::getSingletonPtr()->m_pSceneMgr->createEntity("GroundEntity", "ground");
+    OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
 	entGround->setMaterialName("Examples/Rockwall");
     entGround->setCastShadows(false);
 
 	// Init AI characters (temp)
-	Ogre::Entity* zombieEnt1 = this->gameRenderer->getSceneManager()->createEntity("Zombie1", "malezombie.mesh");
+	Ogre::Entity* zombieEnt1 = OgreFramework::getSingletonPtr()->m_pSceneMgr->createEntity("Zombie1", "malezombie.mesh");
 	zombieEnt1->setCastShadows(true);
-    Ogre::SceneNode* zombieNode1 = this->gameRenderer->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+    Ogre::SceneNode* zombieNode1 = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
     zombieNode1->attachObject(zombieEnt1);
 	zombieNode1->setPosition(-200.f, 0.f, 270.f);
 
-	Ogre::Entity* zombieEnt2 = this->gameRenderer->getSceneManager()->createEntity("Zombie2", "malezombie.mesh");
+	Ogre::Entity* zombieEnt2 = OgreFramework::getSingletonPtr()->m_pSceneMgr->createEntity("Zombie2", "malezombie.mesh");
 	zombieEnt2->setCastShadows(true);
-    Ogre::SceneNode* zombieNode2 = this->gameRenderer->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+    Ogre::SceneNode* zombieNode2 = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
     zombieNode2->attachObject(zombieEnt2);
 	zombieNode2->setPosition(250.f, 0.f, -300.f);
 
@@ -109,7 +110,8 @@ void AnimationDemo::runDemo()
 			//if(this->gameLoop && this->gameLoop->loaded)
 			//		timeTakenAnimation = this->gameLoop->update(timeSinceLastFrame);
 			this->playerChar->updateMovement(timeSinceLastFrame, playerInputVector, &(OgreFramework::getSingletonPtr()->cameraHorizAngle));
-			this->playerChar->updateCharDir(timeSinceLastFrame, 0, 0, &playerInputVector, OgreFramework::getSingletonPtr()->cameraHorizAngle);
+			//this->playerChar->updateCharDir(timeSinceLastFrame, 0, 0, &playerInputVector, OgreFramework::getSingletonPtr()->cameraHorizAngle);
+			this->playerChar->updateCharDir(timeSinceLastFrame, this->aimAngleH, this->aimAngleV, &playerInputVector, OgreFramework::getSingletonPtr()->cameraHorizAngle);
 			//playerInputVector = Vector3::ZERO;
 			playerInputVector = playerInputVector / 3.f;
 			timeTakenAnimation = this->gameAnimation->update(timeSinceLastFrame);
@@ -120,6 +122,8 @@ void AnimationDemo::runDemo()
 				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(0, Ogre::StringConverter::toString( timeTakenAnimation ));
 				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(1, Ogre::StringConverter::toString( timeSinceLastFrame ));
 				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(2, Ogre::StringConverter::toString( this->playerChar->node->getPosition() ));
+				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(3, Ogre::StringConverter::toString( this->aimAngleH.valueDegrees() ));
+				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(4, Ogre::StringConverter::toString( this->aimAngleV.valueDegrees() ));
 			}
 
 			OgreFramework::getSingletonPtr()->updateOgre(timeSinceLastFrame);
@@ -145,7 +149,6 @@ bool AnimationDemo::keyPressed(const OIS::KeyEvent &keyEventRef)
 {
 	OgreFramework::getSingletonPtr()->keyPressed(keyEventRef);
 
-
 	if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_V))
 	{
 		// TODO: Cycle characters
@@ -160,7 +163,7 @@ bool AnimationDemo::keyPressed(const OIS::KeyEvent &keyEventRef)
 
 void AnimationDemo::processInput()
 {
-	// TODO: Acceleration (and thest with animation character_speed)
+	// TODO: Acceleration (and test with animation character_speed)
 	if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_S))
         playerInputVector.x = -1;
     if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_W))
@@ -169,6 +172,28 @@ void AnimationDemo::processInput()
         playerInputVector.z = -1;
     if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_D))
         playerInputVector.z = 1;
+
+	// Temp aiming
+	if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_4))
+	{
+		aimAngleH += Ogre::Radian(Ogre::Degree(3.f));
+		aimAngleH = Ogre::Radian(Ogre::Degree(std::min<float>(aimAngleH.valueDegrees(), 360.f)));
+	}
+	else if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_5))
+	{
+		aimAngleH -= Ogre::Radian(Ogre::Degree(3.f));
+		aimAngleH = Ogre::Radian(Ogre::Degree(std::max<float>(aimAngleH.valueDegrees(), 0.f)));
+	}
+	else if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_6))
+	{
+		aimAngleV += Ogre::Radian(Ogre::Degree(3.f));
+		aimAngleV = Ogre::Radian(Ogre::Degree(std::min<float>(aimAngleV.valueDegrees(), 180.f)));
+	}
+	else if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_7))
+	{
+		aimAngleV -= Ogre::Radian(Ogre::Degree(3.f));
+		aimAngleV = Ogre::Radian(Ogre::Degree(std::max<float>(aimAngleV.valueDegrees(), 0.f)));
+	}
 
 	 // TODO: setNextAction() only has one action and ignores these...
 

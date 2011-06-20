@@ -15,7 +15,7 @@
 	
 	
 	<!-- Upper Body __________________________________________________________________________________________________________ -->
-	<stateLayer name="upperbody" type="partial" startState="noweaponIdle">
+	<stateLayer name="upperbody" type="partial" startState="aiming">
 		<blendMask>
 			<bone name="root" weight="0"/>
 			<bone name="leftHip" weight="0"/>

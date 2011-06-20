@@ -14,7 +14,7 @@
 #include "Ogre.h"
 
 #include "../ObjectTextDisplay.h"
-#include "../GameRenderer.h"
+#include "OgreFramework.h"
 
 #include "AnimationController.h"
 
@@ -22,7 +22,7 @@ class AnimationGraph
 {
 	// Functions
 public:
-	AnimationGraph(GameRenderer* gameRenderer, Ogre::Overlay* m_pOverlay, std::string name, float posX, float posY, float txtPosX, float txtPosY, float width = 0.3f, float height = 0.2f);
+	AnimationGraph(Ogre::Overlay* m_pOverlay, std::string name, float posX, float posY, float txtPosX, float txtPosY, float width = 0.3f, float height = 0.2f);
 	~AnimationGraph();
 
 	void init();
@@ -37,8 +37,6 @@ private:
 
 	// Variables
 private:
-	GameRenderer* gameRenderer;
-
 	std::string name;
 	Ogre::ManualObject* manual_first;
 	Ogre::ManualObject* manual_second;
@@ -73,7 +71,7 @@ class AnimationGUI
 {
 	// Functions
 public:
-	AnimationGUI(GameRenderer* gameRenderer);
+	AnimationGUI();
 	~AnimationGUI();
 
 	void init(AnimationController* animPipeline);
@@ -91,12 +89,13 @@ public:
 
 	std::string getEntityName();
 
+	static void destroyManualObject(Ogre::ManualObject* manualObj);
+
 	// Variables
 private:
 	AnimationController* animController;
 	std::string entityName;
 
-	GameRenderer* gameRenderer;
 	Ogre::Overlay* m_pOverlay;
 
 	bool visible;

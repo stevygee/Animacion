@@ -13,9 +13,7 @@
 
 #include "Ogre.h"
 
-#include "GameRenderer.h"
-
-#include "animacion/AnimationController.h"
+#include "AnimControllers.h"
 #include "animacion/AnimationPipeline.h"
 #include "animacion/AnimationXML.h"
 #include "animacion/AnimationGUI.h"
@@ -38,7 +36,7 @@ public:
 
 	// Functions
 public:
-	GameAnimation(GameRenderer* gameRenderer);
+	GameAnimation();
 	~GameAnimation();
 
 	void init();
@@ -56,8 +54,6 @@ private:
 public:
 	AnimationGUI* animGUI;
 private:
-	GameRenderer* gameRenderer;
-
 	std::map<std::string, AnimationXML*> xmlFiles;
 	std::vector<animatedCharacter*> animCharacters;
 

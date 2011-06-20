@@ -1,5 +1,5 @@
 #ifndef LAUNCH_WITH_CONFIG_DIALOG
-#define LAUNCH_WITH_CONFIG_DIALOG 0
+#define LAUNCH_WITH_CONFIG_DIALOG 1
 #endif
 
 #include "OgreFramework.h"
@@ -186,6 +186,8 @@ void OgreFramework::createGUI()
     items.push_back("timeTakenAnimation");
     items.push_back("timeSinceLast");
     items.push_back("playerPos");
+	items.push_back("aimAngleH");
+	items.push_back("aimAngleV");
 
 	m_pDetailsPanel = m_pTrayMgr->createParamsPanel(OgreBites::TL_NONE, "DetailsPanel", 300, items);
 	

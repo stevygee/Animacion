@@ -3,47 +3,27 @@
 // Copyright (C) 2009 - 2010 Lukas Meindl									  //
 //----------------------------------------------------------------------------//
 
-
-//----------------------------------------------------------------------------//
-// Includes                                                                   //
-//----------------------------------------------------------------------------//
-
 #include "PlayerCharacter.h"
-
-//----------------------------------------------------------------------------//
-// Functions                                                                  //
-//----------------------------------------------------------------------------//
-
-
-unsigned int PlayerCharacter::playerNum = 0;
 
 const Ogre::Real PlayerCharacter::MOVEROTATION_SMOOTH_TARGETTIME = Ogre::Real(300.f);
 
-PlayerCharacter::PlayerCharacter(GameRenderer* gameRenderer):
+PlayerCharacter::PlayerCharacter():
 m_moveRotation(MOVEROTATION_SMOOTH_TARGETTIME)
 {
-	//this->collisionTool = NULL;
-
-	this->gameRenderer = gameRenderer;
-
 	std::stringstream identifierStream;
-	identifierStream << "Player " << playerNum;
+	identifierStream << "Player";
 	this->identifier =  identifierStream.str();
-	playerNum++;
 
 	moveSpeed = 0.25f;
 }
 
-PlayerCharacter::~PlayerCharacter()
-{
-	
-}
+PlayerCharacter::~PlayerCharacter() {}
 
 void PlayerCharacter::init(std::string meshName, GameAnimation* gameAnimation)
 {
 	// Entity / Node
-	this->ent = this->gameRenderer->getSceneManager()->createEntity("Eva", meshName);
-    this->node = this->gameRenderer->getSceneManager()->getRootSceneNode()->createChildSceneNode();
+	this->ent = OgreFramework::getSingletonPtr()->m_pSceneMgr->createEntity("Eva", meshName);
+    this->node = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
     this->node->attachObject(this->ent);
 
 	// Animation
@@ -51,15 +31,21 @@ void PlayerCharacter::init(std::string meshName, GameAnimation* gameAnimation)
 	this->animation = static_cast<AnimCtrlPlayerCharacter*>( animController );
 }
 
-//Updating function
-void PlayerCharacter::update(unsigned long timeSinceLastFrame, Ogre::Entity* pointedEntity, Ogre::Vector3* aimPoint)
-{
-}
-
 void PlayerCharacter::updateCharDir(unsigned long timeSinceLastFrame, Ogre::Entity* pointedEntity, Ogre::Vector3* aimPoint, Ogre::Vector3* moveDir, Ogre::Radian &moveDirRotAngle)
 {
 	if(pointedEntity)
 		updateCharDirLooking(aimPoint, moveDir, timeSinceLastFrame);
+
+	updateCharDirMoving(moveDir, timeSinceLastFrame, moveDirRotAngle);
+}
+
+void PlayerCharacter::updateCharDir(unsigned long timeSinceLastFrame, Ogre::Radian angleHorizontal, Ogre::Radian angleVertical, Ogre::Vector3* moveDir, Ogre::Radian &moveDirRotAngle)
+{
+	// Use theses angles
+	this->animation->updateAimRotation(angleHorizontal, angleVertical, timeSinceLastFrame);	// For Animation
+	/*this->animation->setDirectionVector("nodeDirection",	nodeDirection);					// For AnimationGUI...
+	this->animation->setDirectionVector("aimDirHorizontal",	aimDirection);
+	this->animation->setDirectionVector("aimDirVertical",	aimDirectionY);*/
 
 	updateCharDirMoving(moveDir, timeSinceLastFrame, moveDirRotAngle);
 }
@@ -86,12 +72,11 @@ Ogre::Vector3 PlayerCharacter::updateMovement(unsigned long timeSinceLastFrame, 
 		Ogre::Vector3 newPos = node->getPosition() + moveVector * moveSpeed * (Ogre::Real)timeSinceLastFrame;
 		this->node->setPosition(newPos);
 
-		// Get Agent speed for animation
+		// Pass actual character speed on to animation system
 		this->animation->setFlagValue( "character_speed", moveSpeed * moveVector.length() );
 
 		return newPos;
 	}
-
 }
 
 void PlayerCharacter::updateCharDirLooking(Ogre::Vector3* aimPoint, Ogre::Vector3* moveDir, unsigned long timeSinceLastFrame)
@@ -110,27 +95,27 @@ void PlayerCharacter::updateCharDirLooking(Ogre::Vector3* aimPoint, Ogre::Vector
 	// Horizontal angle
 	Ogre::Radian angleHorizontal = nodeDirection.angleBetween(aimDirection);
 
-	// Ist das Ziel links oder rechts vom Richtungsvektor?
-	// siehe http://www.c-plusplus.de/forum/viewtopic-var-t-is-266934.html und http://www.mikrocontroller.net/topic/105993
+	// Is the target on the left or the right side of the direction vector?
+	// see http://www.c-plusplus.de/forum/viewtopic-var-t-is-266934.html and http://www.mikrocontroller.net/topic/105993 (German)
 	Vector3 A = node->getPosition();					// Stützvektor
 	Vector3 B = nodeDirection + node->getPosition();	// Zielpunkt Richtungsvektor (Node Richtung)
 	Vector3 C = (*aimPoint);							// Gefragter Punkt
-	Vector3 R = B-A;									// Richtungsvektor;
+	Vector3 R = B-A;									// Richtungsvektor
 	
 	if((R.z * (C.x-A.x) - R.x * (C.z - A.z)) > 0)
-		angleHorizontal = -angleHorizontal; // Winkel auf der linken Seite negativ
-	angleHorizontal += Ogre::Radian(Ogre::Degree(180)); // -180 bis 180 wird zu 0 bis 360 (180 = vorn)
+		angleHorizontal = -angleHorizontal; // Make angle negative if on left side
+	angleHorizontal += Ogre::Radian(Ogre::Degree(180)); // From -180° to 180° becomes 0° to 360° (where 180° is forwards)
 
 	// Vertical angle
 	Ogre::Radian angleVertical = aimDirection.angleBetween(aimDirectionY);
 
 	if(aimDirectionY.y > 0.f)
-		angleVertical = -angleVertical; // Winkel negativ, wenn man "hinauf schaut"
-	angleVertical += Ogre::Radian(Ogre::Degree(90)); // -90 bis 90 wird zu 0 bis 180 (0 = oben, 180 = unten)
+		angleVertical = -angleVertical; // Angle negative when looking up
+	angleVertical += Ogre::Radian(Ogre::Degree(90)); // From -90° to 90° becomes 0° to 180° (where 0° is up and 180° is down)
 
 	// Use theses angles
 	this->animation->updateAimRotation(angleHorizontal, angleVertical, timeSinceLastFrame);	// For Animation
-	this->animation->setDirectionVector("nodeDirection",	nodeDirection);			// For AnimationGUI
+	this->animation->setDirectionVector("nodeDirection",	nodeDirection);					// For AnimationGUI...
 	this->animation->setDirectionVector("aimDirHorizontal",	aimDirection);
 	this->animation->setDirectionVector("aimDirVertical",	aimDirectionY);
 }

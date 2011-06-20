@@ -6,7 +6,6 @@
 //|||||||||||||||||||||||||||||||||||||||||||||||
 
 #include "OgreFramework.h"
-#include "GameRenderer.h"
 #include "GameAnimation.h"
 #include "PlayerCharacter.h"
 
@@ -33,8 +32,10 @@ private:
 	//Variables
 	bool loaded;
 private:
-	GameRenderer* gameRenderer;
 	GameAnimation* gameAnimation;
+
+	Ogre::Radian aimAngleH;
+	Ogre::Radian aimAngleV;
 public:
 	PlayerCharacter* playerChar;
 	Ogre::Vector3				playerInputVector;

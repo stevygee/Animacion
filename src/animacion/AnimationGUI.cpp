@@ -6,10 +6,8 @@
 
 #include "AnimationGUI.h"
 
-AnimationGUI::AnimationGUI(GameRenderer* gameRenderer)
+AnimationGUI::AnimationGUI()
 {
-	this->gameRenderer = gameRenderer;
-
 	this->animController = 0;
 	this->m_pOverlay = 0;
 
@@ -32,9 +30,9 @@ AnimationGUI::~AnimationGUI()
 	}
 
 	// Destroy direction lines
-	for(std::map<std::string, ManualObject*>::iterator i = this->directionVectors.begin(); i != this->directionVectors.end();)
+	for(std::map<std::string, Ogre::ManualObject*>::iterator i = this->directionVectors.begin(); i != this->directionVectors.end();)
 	{
-		GameRenderer::destroyManualObject( (*i).second, this->gameRenderer );
+		AnimationGUI::destroyManualObject( (*i).second );
 		(*i).second = 0;
 		i = this->directionVectors.erase(i);
 	}
@@ -121,7 +119,7 @@ void AnimationGUI::initChar(AnimationController* animController)
 			txtPosY = 0.43f;
 		}
 
-		AnimationGraph* graph = new AnimationGraph(this->gameRenderer, m_pOverlay, anim->getAnimationName(), posX, posY, txtPosX, txtPosY);
+		AnimationGraph* graph = new AnimationGraph(m_pOverlay, anim->getAnimationName(), posX, posY, txtPosX, txtPosY);
 		graph->init();
 		graph->setVisible(this->visible);
 		this->graphs.push_back(graph);
@@ -139,14 +137,14 @@ void AnimationGUI::initChar(AnimationController* animController)
 void AnimationGUI::initDirectionVectors()
 {
 	// Create manual objects
-	directionVectors["nodeDir"]				= this->gameRenderer->getSceneManager()->createManualObject( "gameGUI_manualObj_nodeDir" );
-	directionVectors["aimDirHorizontal"]	= this->gameRenderer->getSceneManager()->createManualObject( "gameGUI_manualObj_aimDirHorizontal" );
-	directionVectors["aimDirVertical"]		= this->gameRenderer->getSceneManager()->createManualObject( "gameGUI_manualObj_aimDirVertical" );
+	directionVectors["nodeDir"]				= OgreFramework::getSingletonPtr()->m_pSceneMgr->createManualObject( "gameGUI_manualObj_nodeDir" );
+	directionVectors["aimDirHorizontal"]	= OgreFramework::getSingletonPtr()->m_pSceneMgr->createManualObject( "gameGUI_manualObj_aimDirHorizontal" );
+	directionVectors["aimDirVertical"]		= OgreFramework::getSingletonPtr()->m_pSceneMgr->createManualObject( "gameGUI_manualObj_aimDirVertical" );
 
-	for(std::map<std::string, ManualObject*>::iterator i = this->directionVectors.begin(); i != this->directionVectors.end(); i++)
+	for(std::map<std::string, Ogre::ManualObject*>::iterator i = this->directionVectors.begin(); i != this->directionVectors.end(); i++)
 	{
 		std::string name = (*i).first;
-		ManualObject* dirVector = (*i).second;
+		Ogre::ManualObject* dirVector = (*i).second;
 
 		// Use identity view/projection matrices
 		dirVector->setUseIdentityProjection(false);
@@ -157,7 +155,7 @@ void AnimationGUI::initDirectionVectors()
 		dirVector->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_LIST);
 
 		// Initial values
-		dirVector->position(Vector3(0,0,0));
+		dirVector->position(Ogre::Vector3(0,0,0));
 		dirVector->colour(1,1,1,0.5);	
 		dirVector->end();
 
@@ -170,7 +168,7 @@ void AnimationGUI::initDirectionVectors()
 		ss >> sceneNodeName;
 
 		// Add to scene
-		SceneNode* sceneNode = this->gameRenderer->getSceneManager()->getRootSceneNode()->createChildSceneNode( sceneNodeName );
+		Ogre::SceneNode* sceneNode = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode( sceneNodeName );
 		sceneNode->attachObject( dirVector );
 	}
 }
@@ -204,10 +202,10 @@ void AnimationGUI::update(unsigned long timeSinceLastFrame)
 
 void AnimationGUI::updateDirectionVectors()
 {
-	for(std::map<std::string, ManualObject*>::iterator i = this->directionVectors.begin(); i != this->directionVectors.end(); i++)
+	for(std::map<std::string, Ogre::ManualObject*>::iterator i = this->directionVectors.begin(); i != this->directionVectors.end(); i++)
 	{
 		std::string name = (*i).first;
-		ManualObject* dirVector = (*i).second;
+		Ogre::ManualObject* dirVector = (*i).second;
 
 		// Update Node Direction
 		dirVector->beginUpdate(0);
@@ -277,7 +275,7 @@ void AnimationGUI::toggleVisible()
 	}
 
 	// Set direction vector's visibility
-	for(std::map<std::string, ManualObject*>::iterator i = this->directionVectors.begin(); i != this->directionVectors.end(); i++)
+	for(std::map<std::string, Ogre::ManualObject*>::iterator i = this->directionVectors.begin(); i != this->directionVectors.end(); i++)
 	{
 		(*i).second->setVisible(this->visible);
 	}
@@ -293,11 +291,26 @@ Ogre::String AnimationGUI::getEntityName()
 	return this->entityName;
 }
 
+void AnimationGUI::destroyManualObject(Ogre::ManualObject* manualObj)
+{
+	if( manualObj )
+	{
+		Ogre::SceneManager* sceneMgr = OgreFramework::getSingletonPtr()->m_pSceneMgr;
+
+		if( sceneMgr->hasManualObject( manualObj->getName() ) )
+		{
+			if( manualObj->getParentSceneNode() )
+				manualObj->getParentSceneNode()->detachObject( manualObj );
+
+			sceneMgr->destroyManualObject( manualObj );
+		}
+	}
+}
+
 //----------------------------------------------------------------------------//
 
-AnimationGraph::AnimationGraph(GameRenderer* gameRenderer, Ogre::Overlay* m_pOverlay, std::string name, float posX, float posY, float txtPosX, float txtPosY, float width, float height)
+AnimationGraph::AnimationGraph(Ogre::Overlay* m_pOverlay, std::string name, float posX, float posY, float txtPosX, float txtPosY, float width, float height)
 {
-	this->gameRenderer = gameRenderer;
 	this->m_pOverlay = m_pOverlay;
 	this->visible = false;
 
@@ -339,8 +352,8 @@ AnimationGraph::~AnimationGraph()
 	}
 
 	// Destroy lines
-	GameRenderer::destroyManualObject( this->manual_first, this->gameRenderer );
-	GameRenderer::destroyManualObject( this->manual_second, this->gameRenderer );
+	AnimationGUI::destroyManualObject( this->manual_first );
+	AnimationGUI::destroyManualObject( this->manual_second );
 
 	manual_first = 0;
 	manual_second = 0;
@@ -383,7 +396,7 @@ void AnimationGraph::init()
 Ogre::ManualObject* AnimationGraph::createManualObject(std::string name)
 {
 	// Create a manual object for 2D
-	Ogre::ManualObject* manual = gameRenderer->getSceneManager()->createManualObject(name);
+	Ogre::ManualObject* manual = OgreFramework::getSingletonPtr()->m_pSceneMgr->createManualObject(name);
 
 	// Use identity view/projection matrices
 	manual->setUseIdentityProjection(true);
@@ -416,7 +429,7 @@ Ogre::ManualObject* AnimationGraph::createManualObject(std::string name)
 	manual->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY - 1);
 
 	// Attach to scene
-	gameRenderer->getSceneManager()->getRootSceneNode()->createChildSceneNode()->attachObject(manual);
+	OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(manual);
 
 	return manual;
 }

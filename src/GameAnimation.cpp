@@ -6,10 +6,8 @@
 
 #include "GameAnimation.h"
 
-GameAnimation::GameAnimation(GameRenderer* gameRenderer)
+GameAnimation::GameAnimation()
 {
-	this->gameRenderer = gameRenderer;
-
 	this->timeTaken = 1;
 	this->startTime = 0;
 	this->m_pTimer = 0;
@@ -61,7 +59,7 @@ unsigned long GameAnimation::update(unsigned long timeSinceLastFrame)
 void GameAnimation::init()
 {
 	// GUI
-	this->animGUI = new AnimationGUI(this->gameRenderer);
+	this->animGUI = new AnimationGUI();
 
 	// XML
 	this->xmlFiles.clear();
