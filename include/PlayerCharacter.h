@@ -43,7 +43,8 @@ public:
 
 	Ogre::Entity* ent;
 	Ogre::SceneNode* node;
-	float moveSpeed;
+	float maxMoveSpeed;
+	float curMoveSpeed;
 
 	AnimCtrlPlayerCharacter* animation;
 

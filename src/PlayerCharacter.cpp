@@ -14,7 +14,8 @@ m_moveRotation(MOVEROTATION_SMOOTH_TARGETTIME)
 	identifierStream << "Player";
 	this->identifier =  identifierStream.str();
 
-	moveSpeed = 0.25f;
+	maxMoveSpeed = 0.25f;
+	curMoveSpeed = 0.f;
 }
 
 PlayerCharacter::~PlayerCharacter() {}
@@ -54,26 +55,33 @@ void PlayerCharacter::updateCharDir(unsigned long timeSinceLastFrame, Ogre::Radi
 Ogre::Vector3 PlayerCharacter::updateMovement(unsigned long timeSinceLastFrame, Vector3 inputMoveDir, Ogre::Radian* moveDirRotAngle)
 {
 	//static const float maxUpdateDelay = 0.1f;
+	//Ogre::Vector3 moveVector  = Quaternion(*moveDirRotAngle, Vector3::UNIT_Y) * inputMoveDir;
 
-	if(inputMoveDir.isZeroLength())
+	Ogre::Vector3 moveVector  = this->node->getOrientation() * inputMoveDir;
+	moveVector.normalise();
+
+	// Acceleration
+	if( inputMoveDir.isZeroLength() )
+		curMoveSpeed = (curMoveSpeed < 0.1f) ? 0.f : ( curMoveSpeed - 0.05f );
+	else
+		curMoveSpeed = (curMoveSpeed > maxMoveSpeed) ? maxMoveSpeed : ( curMoveSpeed + 0.05f );
+
+	// Standing or running?
+	if( curMoveSpeed == 0.f )
 	{
 		this->animation->setNextAction("stop");
+
 		return node->getPosition();
 	}
 	else
 	{
-		//Ogre::Vector3 moveVector  = Quaternion(*moveDirRotAngle, Vector3::UNIT_Y) * inputMoveDir;
-		Ogre::Vector3 moveVector  = this->node->getOrientation() * inputMoveDir; // TODO: Running backwards goes crazy, turn too fast
-		//Ogre::Vector3 moveVector = inputMoveDir;
-		moveVector.normalise();
-
 		this->animation->setNextAction("run");
 		
-		Ogre::Vector3 newPos = node->getPosition() + moveVector * moveSpeed * (Ogre::Real)timeSinceLastFrame;
+		Ogre::Vector3 newPos = node->getPosition() + moveVector * curMoveSpeed * (Ogre::Real)timeSinceLastFrame;
 		this->node->setPosition(newPos);
 
 		// Pass actual character speed on to animation system
-		this->animation->setFlagValue( "character_speed", moveSpeed * moveVector.length() );
+		this->animation->setFlagValue( "character_speed", curMoveSpeed );
 
 		return newPos;
 	}
@@ -122,6 +130,8 @@ void PlayerCharacter::updateCharDirLooking(Ogre::Vector3* aimPoint, Ogre::Vector
 
 void PlayerCharacter::updateCharDirMoving(Ogre::Vector3* moveDir, unsigned long timeSinceLastFrame, Ogre::Radian &moveDirRotAngle)
 {
+	 // TODO: Running backwards goes crazy, turn too fast
+
 	if(!moveDir->isZeroLength())
 	{
 		//Ogre::Vector3 targetDirection = Quaternion(moveDirRotAngle, Vector3::UNIT_Y) * (*moveDir);
@@ -129,7 +139,9 @@ void PlayerCharacter::updateCharDirMoving(Ogre::Vector3* moveDir, unsigned long 
 
 		Ogre::Radian rotationDifferenceToLastValue = m_lastTargetDirection.angleBetween(targetDirection);
 
-		if(rotationDifferenceToLastValue > Radian(0.001))
+		Radian targetRotation;
+
+		if(rotationDifferenceToLastValue > Ogre::Radian(Ogre::Real(0.001)))
 		{
 			Quaternion rotationQuat = (Vector3::UNIT_X).getRotationTo(targetDirection, Vector3::UNIT_Y);
 

@@ -6,8 +6,8 @@
 AnimationDemo::AnimationDemo()
 {
 	this->playerInputVector = Ogre::Vector3(Ogre::Vector3::ZERO);
-	this->aimAngleH = Ogre::Radian(Ogre::Degree(0));
-	this->aimAngleV = Ogre::Radian(Ogre::Degree(0));
+	this->aimAngleH = Ogre::Radian(Ogre::Degree(180.f));
+	this->aimAngleV = Ogre::Radian(Ogre::Degree(90.f));
 }
 
 AnimationDemo::~AnimationDemo()
@@ -100,19 +100,16 @@ void AnimationDemo::runDemo()
 		if(OgreFramework::getSingletonPtr()->m_pRenderWnd->isActive())
 		{
 			startTime = OgreFramework::getSingletonPtr()->m_pTimer->getMillisecondsCPU();
-					
+			
 			OgreFramework::getSingletonPtr()->m_pKeyboard->capture();
 			OgreFramework::getSingletonPtr()->m_pMouse->capture();
 
 			// Update game loop
 			processInput();
 
-			//if(this->gameLoop && this->gameLoop->loaded)
-			//		timeTakenAnimation = this->gameLoop->update(timeSinceLastFrame);
 			this->playerChar->updateMovement(timeSinceLastFrame, playerInputVector, &(OgreFramework::getSingletonPtr()->cameraHorizAngle));
-			//this->playerChar->updateCharDir(timeSinceLastFrame, 0, 0, &playerInputVector, OgreFramework::getSingletonPtr()->cameraHorizAngle);
 			this->playerChar->updateCharDir(timeSinceLastFrame, this->aimAngleH, this->aimAngleV, &playerInputVector, OgreFramework::getSingletonPtr()->cameraHorizAngle);
-			//playerInputVector = Vector3::ZERO;
+			
 			playerInputVector = playerInputVector / 3.f;
 			timeTakenAnimation = this->gameAnimation->update(timeSinceLastFrame);
 
@@ -121,9 +118,10 @@ void AnimationDemo::runDemo()
 			{
 				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(0, Ogre::StringConverter::toString( timeTakenAnimation ));
 				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(1, Ogre::StringConverter::toString( timeSinceLastFrame ));
-				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(2, Ogre::StringConverter::toString( this->playerChar->node->getPosition() ));
-				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(3, Ogre::StringConverter::toString( this->aimAngleH.valueDegrees() ));
-				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(4, Ogre::StringConverter::toString( this->aimAngleV.valueDegrees() ));
+				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(2, Ogre::StringConverter::toString( this->playerChar->curMoveSpeed ));
+				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(3, Ogre::StringConverter::toString( this->playerChar->node->getPosition() ));
+				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(4, Ogre::StringConverter::toString( this->aimAngleH.valueDegrees() ));
+				OgreFramework::getSingletonPtr()->m_pDetailsPanel->setParamValue(5, Ogre::StringConverter::toString( this->aimAngleV.valueDegrees() ));
 			}
 
 			OgreFramework::getSingletonPtr()->updateOgre(timeSinceLastFrame);
@@ -163,7 +161,7 @@ bool AnimationDemo::keyPressed(const OIS::KeyEvent &keyEventRef)
 
 void AnimationDemo::processInput()
 {
-	// TODO: Acceleration (and test with animation character_speed)
+	// Player navigation
 	if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_S))
         playerInputVector.x = -1;
     if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_W))
@@ -177,22 +175,22 @@ void AnimationDemo::processInput()
 	if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_4))
 	{
 		aimAngleH += Ogre::Radian(Ogre::Degree(3.f));
-		aimAngleH = Ogre::Radian(Ogre::Degree(std::min<float>(aimAngleH.valueDegrees(), 360.f)));
+		aimAngleH = (aimAngleH <= Ogre::Radian(Ogre::Degree(360.f))) ? aimAngleH : aimAngleH - Ogre::Radian(Ogre::Degree(360.f));
 	}
 	else if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_5))
 	{
 		aimAngleH -= Ogre::Radian(Ogre::Degree(3.f));
-		aimAngleH = Ogre::Radian(Ogre::Degree(std::max<float>(aimAngleH.valueDegrees(), 0.f)));
+		aimAngleH = (aimAngleH >= Ogre::Radian(Ogre::Degree(0.f))) ? aimAngleH : aimAngleH + Ogre::Radian(Ogre::Degree(360.f));
 	}
-	else if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_6))
+	if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_6))
 	{
 		aimAngleV += Ogre::Radian(Ogre::Degree(3.f));
-		aimAngleV = Ogre::Radian(Ogre::Degree(std::min<float>(aimAngleV.valueDegrees(), 180.f)));
+		aimAngleV = Ogre::Radian(Ogre::Degree(std::min<float>(aimAngleV.valueDegrees(), 135.f)));
 	}
 	else if (OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_7))
 	{
 		aimAngleV -= Ogre::Radian(Ogre::Degree(3.f));
-		aimAngleV = Ogre::Radian(Ogre::Degree(std::max<float>(aimAngleV.valueDegrees(), 0.f)));
+		aimAngleV = Ogre::Radian(Ogre::Degree(std::max<float>(aimAngleV.valueDegrees(), 45.f)));
 	}
 
 	 // TODO: setNextAction() only has one action and ignores these...
