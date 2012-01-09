@@ -62,9 +62,15 @@ Ogre::Vector3 PlayerCharacter::updateMovement(unsigned long timeSinceLastFrame, 
 
 	// Acceleration
 	if( inputMoveDir.isZeroLength() )
-		curMoveSpeed = (curMoveSpeed < 0.1f) ? 0.f : ( curMoveSpeed - 0.05f );
+	{
+		curMoveSpeed -= 0.001f * timeSinceLastFrame;
+		curMoveSpeed = (curMoveSpeed < 0.001f) ? 0.f : curMoveSpeed;
+	}
 	else
-		curMoveSpeed = (curMoveSpeed > maxMoveSpeed) ? maxMoveSpeed : ( curMoveSpeed + 0.05f );
+	{
+		curMoveSpeed += 0.001f * timeSinceLastFrame;
+		curMoveSpeed = (curMoveSpeed > maxMoveSpeed) ? maxMoveSpeed : curMoveSpeed;
+	}
 
 	// Standing or running?
 	if( curMoveSpeed == 0.f )
@@ -132,7 +138,25 @@ void PlayerCharacter::updateCharDirMoving(Ogre::Vector3* moveDir, unsigned long 
 {
 	 // TODO: Running backwards goes crazy, turn too fast
 
+	// http://www.ogre3d.org/tikiwiki/Intermediate+Tutorial+1&structure=Tutorials
+	// http://www.ogre3d.org/tikiwiki/Quaternion+and+Rotation+Primer#Q._How_can_I_make_my_objects_rotate_smoothly_You_mentioned_slerp_etc_
+
 	if(!moveDir->isZeroLength())
+	{
+		Ogre::Vector3 src = this->node->getOrientation() * Ogre::Vector3::UNIT_Z;
+
+		if ((1.0f + src.dotProduct(*moveDir)) < 0.0001f) 
+		{
+			this->node->yaw(Ogre::Degree(180));
+		}
+		else
+		{
+			Ogre::Quaternion quat = src.getRotationTo(*moveDir);
+			this->node->rotate(quat);
+		}
+	}
+
+	/*if(!moveDir->isZeroLength())
 	{
 		//Ogre::Vector3 targetDirection = Quaternion(moveDirRotAngle, Vector3::UNIT_Y) * (*moveDir);
 		Ogre::Vector3 targetDirection = this->node->getOrientation() * *moveDir;
@@ -147,14 +171,15 @@ void PlayerCharacter::updateCharDirMoving(Ogre::Vector3* moveDir, unsigned long 
 
 			Radian targetRotation = rotationQuat.getYaw();
 
-			m_moveRotation.setTargetValueWithAdjustedSmoothtime(targetRotation, true);
+			//m_moveRotation.setTargetValueWithAdjustedSmoothtime(targetRotation, true);
+			m_moveRotation = targetRotation;
 		}
 
 
-		m_moveRotation.smoothValue(timeSinceLastFrame);
+		//m_moveRotation.smoothValue(timeSinceLastFrame);
 		this->node->setDirection(0,0,-1, Node::TS_WORLD);
-		this->node->yaw(m_moveRotation.getCurrentValue());
+		this->node->yaw(m_moveRotation);
 
 		m_lastTargetDirection = targetDirection;
-	}
+	}*/
 }

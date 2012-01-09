@@ -12,13 +12,10 @@
 
 #include "OgreFramework.h"
 
-#include "SmoothableRadian.h"
-
 #include "GameAnimation.h"
 #include "AnimationController.h"
 
 using namespace Ogre;
-using namespace Mathematics;
 
 class PlayerCharacter
 {
@@ -50,7 +47,7 @@ public:
 
 private:
 	Ogre::Vector3				m_lastTargetDirection;
-	SmoothableRadian			m_moveRotation;
+	Ogre::Radian				m_moveRotation;
 	static const Ogre::Real		MOVEROTATION_SMOOTH_TARGETTIME;
 };
 

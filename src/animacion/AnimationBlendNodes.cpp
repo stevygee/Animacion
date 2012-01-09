@@ -45,7 +45,7 @@ std::vector<animationBlendMaskEntry> AnimationStateLayer::getBlendMask()
 // State
 //----------------------------------------------------------------------------//
 
-AnimationActionState::AnimationActionState(std::string name, AnimationBlendTree* blendTree, std::vector<AnimationTransition*> transitions, std::string targetState, std::string stateLayerName)
+AnimationActionState::AnimationActionState(std::string name, AnimationBlendTree* blendTree, std::vector<AnimationTransition*> transitions, std::string targetState)
 {
 	// Validate XML values, if invalid use default value
 	this->name				= name.empty()			? ""		: name;
@@ -53,7 +53,7 @@ AnimationActionState::AnimationActionState(std::string name, AnimationBlendTree*
 	this->transitions		= transitions;
 	this->targetState		= targetState.empty()	? ""		: targetState;
 
-	this->stateLayerName	= stateLayerName.empty()	? ""	: stateLayerName;
+	this->stateLayer		= 0;
 }
 
 AnimationActionState::~AnimationActionState()
@@ -87,9 +87,10 @@ std::string AnimationActionState::getTargetState()
 	return this->targetState;
 }
 
-std::string AnimationActionState::getStateLayerName()
+AnimationStateLayer* AnimationActionState::getStateLayer()
 {
-	return this->stateLayerName;
+	// TODO: Exception
+	return this->stateLayer;
 }
 
 std::map<std::string, float> AnimationActionState::getActiveFlags()
@@ -105,6 +106,11 @@ float AnimationActionState::getFlagValue(std::string flagName)
 void AnimationActionState::setFlagValue(std::string flagName, float flagValue)
 {
 	this->activeFlags[flagName] = flagValue;
+}
+
+void AnimationActionState::setStateLayer(AnimationStateLayer* stateLayer)
+{
+	this->stateLayer = stateLayer;
 }
 
 //----------------------------------------------------------------------------//

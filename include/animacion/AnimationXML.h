@@ -34,9 +34,9 @@ public:
 	std::string getWeaponBone();
 
 	std::vector<AnimationActionState*> getStates(std::string stateLayerName);	// Return list of all states from the stateLayer
-	AnimationStateLayer* getStateLayer(std::string stateLayerName);
 	std::vector<AnimationStateLayer*> getStateLayers();
 private:
+	AnimationStateLayer* getStateLayer(std::string stateLayerName);
 	TiXmlHandle AnimationXML::getStateBlendTree(std::string stateName, std::string stateLayerName);
 	AnimationBlendNode* getBlendNode(TiXmlHandle parent, int childIndex);
 

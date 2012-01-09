@@ -158,39 +158,6 @@ private:
 
 //----------------------------------------------------------------------------//
 
-class AnimationActionState
-{
-	// Functions
-public:
-	AnimationActionState(std::string name, AnimationBlendTree* blendTree, std::vector<AnimationTransition*> transitions, std::string targetState, std::string stateLayerName);
-	~AnimationActionState();
-
-	// Getter
-	std::string getName();
-	AnimationBlendTree* getBlendTree();
-	AnimationTransition* getTransition(std::string actionName);		// Get transition via action
-	std::string getTargetState();
-
-	std::string getStateLayerName();
-	std::map<std::string, float> getActiveFlags();
-	float getFlagValue(std::string flagName);
-
-	// Setter
-	void setFlagValue(std::string flagName, float flagValue);
-
-	// Variables
-private:
-	std::string name;
-	AnimationBlendTree* blendTree;
-	std::vector<AnimationTransition*> transitions;
-	std::string targetState;
-
-	std::string stateLayerName;
-	std::map<std::string, float> activeFlags;
-};
-
-//----------------------------------------------------------------------------//
-
 struct animationBlendMaskEntry {
 	std::string name;
 	float weight;
@@ -217,6 +184,40 @@ private:
 	std::string startState;
 
 	std::vector<animationBlendMaskEntry> blendMask;
+};
+
+//----------------------------------------------------------------------------//
+
+class AnimationActionState
+{
+	// Functions
+public:
+	AnimationActionState(std::string name, AnimationBlendTree* blendTree, std::vector<AnimationTransition*> transitions, std::string targetState);
+	~AnimationActionState();
+
+	// Getter
+	std::string getName();
+	AnimationBlendTree* getBlendTree();
+	AnimationTransition* getTransition(std::string actionName);		// Get transition via action
+	std::string getTargetState();
+
+	AnimationStateLayer* getStateLayer();
+	std::map<std::string, float> getActiveFlags();
+	float getFlagValue(std::string flagName);
+
+	// Setter
+	void setFlagValue(std::string flagName, float flagValue);
+	void setStateLayer(AnimationStateLayer* stateLayer);
+
+	// Variables
+private:
+	std::string name;
+	AnimationBlendTree* blendTree;
+	std::vector<AnimationTransition*> transitions;
+	std::string targetState;
+
+	AnimationStateLayer* stateLayer;
+	std::map<std::string, float> activeFlags;
 };
 
 //----------------------------------------------------------------------------//

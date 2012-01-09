@@ -184,7 +184,7 @@ std::vector<AnimationActionState*> AnimationXML::getStates(std::string stateLaye
 
 				// Add this state to the list
 				actionStates.push_back(
-					new AnimationActionState(stateName, blndTree, transitions, targetState, stateLayerName)
+					new AnimationActionState(stateName, blndTree, transitions, targetState)
 				);
 
 				transitions.clear();
@@ -234,7 +234,7 @@ std::vector<AnimationActionState*> AnimationXML::getStates(std::string stateLaye
 
 				// Add this state to the list
 				actionStates.push_back(
-					new AnimationActionState(stateName, blndTree, transitions, to, stateLayerName)
+					new AnimationActionState(stateName, blndTree, transitions, to)
 				);
 
 				transitions.clear();

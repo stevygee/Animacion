@@ -26,6 +26,12 @@ void AnimationStateMachine::init()
 	this->actionStates.clear();
 	this->actionStates = this->animXML->getStates( this->stateLayer->getName() );
 
+	// Set stateLayer shortcut
+	for(unsigned int i = 0; i < this->actionStates.size(); i++)
+	{
+		getState(i)->setStateLayer( this->stateLayer );
+	}
+
 	// If a transition is currently active, reset it
 	if(this->currentTrans) this->currentTrans->reset();
 

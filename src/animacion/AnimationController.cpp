@@ -96,11 +96,13 @@ std::vector<AnimationActionState*> AnimationController::getActiveStates()
 
 bool AnimationController::isStateActive(std::string stateName, std::string stateLayerName)
 {
+	// TODO: Optimize
+
 	for(unsigned int i = 0; i < this->stateMachines.size(); i++)
 	{
 		AnimationActionState* state = this->stateMachines.at(i)->getCurrentState();
 
-		if(	state->getStateLayerName().compare( stateLayerName ) == 0 )
+		if(	state->getStateLayer()->getName().compare( stateLayerName ) == 0 )
 		{
 			return state->getName().compare( stateName ) == 0;
 		}

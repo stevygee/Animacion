@@ -115,8 +115,6 @@
     <ClInclude Include="..\..\include\ObjectTextDisplay.h" />
     <ClInclude Include="..\..\include\OgreFramework.h" />
     <ClInclude Include="..\..\include\PlayerCharacter.h" />
-    <ClInclude Include="..\..\include\SmoothableRadian.h" />
-    <ClInclude Include="..\..\include\SmoothValue.h" />
     <ClInclude Include="..\..\include\animacion\Animacion.h" />
     <ClInclude Include="..\..\include\animacion\AnimationBlendNodes.h" />
     <ClInclude Include="..\..\include\animacion\AnimationController.h" />
@@ -140,10 +138,6 @@
     <ClCompile Include="..\..\src\OgreFramework.cpp">
     </ClCompile>
     <ClCompile Include="..\..\src\PlayerCharacter.cpp">
-    </ClCompile>
-    <ClCompile Include="..\..\src\SmoothableRadian.cpp">
-    </ClCompile>
-    <ClCompile Include="..\..\src\SmoothValue.cpp">
     </ClCompile>
     <ClCompile Include="..\..\src\animacion\AnimationBlendNodes.cpp">
     </ClCompile>

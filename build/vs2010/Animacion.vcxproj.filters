@@ -36,12 +36,6 @@
     <ClInclude Include="..\..\include\PlayerCharacter.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\SmoothableRadian.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SmoothValue.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\animacion\Animacion.h">
       <Filter>include\animacion</Filter>
     </ClInclude>
@@ -90,12 +84,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\PlayerCharacter.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\SmoothableRadian.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\SmoothValue.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\animacion\AnimationBlendNodes.cpp">

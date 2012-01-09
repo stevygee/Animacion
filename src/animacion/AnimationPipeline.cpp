@@ -79,7 +79,7 @@ void AnimationPipeline::update(std::vector<AnimationActionState*> activeStates, 
 		// TODO: Actually combine the blend trees, taking in account if layer is LERP or additive
 		blend(
 			activeStates.at(i)->getBlendTree(),
-			this->animXML->getStateLayer( activeStates.at(i)->getStateLayerName() )->getBlendMask(),
+			activeStates.at(i)->getStateLayer()->getBlendMask(),
 			activeStates.at(i)->getActiveFlags()
 		);
 	}
